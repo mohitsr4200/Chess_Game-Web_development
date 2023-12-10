@@ -1,0 +1,54 @@
+<html >
+<head>
+    <title>Chess board</title>
+    <link rel="stylesheet" href="css/Chess.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body class="z">
+<button class=" exit btn btn-outline-secondary btn-success" onclick="board.first_move()">
+    <strong>START</strong>
+</button>
+<button class="exit btn btn-outline-secondary btn-info" onclick="board.last_move()">
+    <strong>FINAL MOVE</strong>
+</button>
+<button class="exit save btn btn-outline-secondary btn-link" onclick="board.first_move()">
+    <strong><a href="ChessP.html">EXIT</a></strong>
+</button>
+<button class="exit btn btn-outline-secondary btn-warning" onclick="board.update()">
+    <strong><a href="ChessP.html" >SAVE & EXIT</a></strong>
+</button>
+
+<div class="row mt-5">
+    <div >
+        <div id="chessboard"></div>
+        <div class="btn-group col mt-2 mb-2">
+
+            <button class="btn btn-outline-secondary" onclick="board.undo_move()">
+                <strong>UNDO</strong>
+            </button>
+            <button class="btn btn-outline-secondary" onclick="board.redo_move()">
+                <strong>REDO</strong>
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+<script src="js/chess.js"></script>
+
+<script>
+    var board = new Board();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
