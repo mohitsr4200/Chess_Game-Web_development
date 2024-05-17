@@ -1,14 +1,14 @@
 
 var Board = function(width, light_square, dark_square, select_color) {
 
-    const white = 0;
-    const black = 1;
+    const white = 0,black = 1;
     const P = 1;   //white
     const N = 2;
     const B = 3;
     const R = 4;
     const Q = 5;
     const K = 6;
+
     const p = 7;    //black
     const n = 8;
     const b = 9;
@@ -16,9 +16,10 @@ var Board = function(width, light_square, dark_square, select_color) {
     const q = 11;
     const k = 12;
 
-    const o = 13;
-    const e = 0;
+    const o = 13; //Occupied  square
+    const e = 0; // Unoccupied  square
 
+    const no_sq = 120;
     const a8 = 0, b8 = 1, c8 = 2, d8 = 3, e8 = 4, f8 = 5, g8 = 6, h8 = 7;
     const a7 = 16, b7 = 17, c7 = 18, d7 = 19, e7 = 20, f7 = 21, g7 = 22, h7 = 23;
     const a6 = 32,b6 = 33,c6 = 34, d6 = 35, e6 = 36,  f6 = 37,  g6 = 39,  h6 = 40;
@@ -27,7 +28,6 @@ var Board = function(width, light_square, dark_square, select_color) {
     const a3 = 80, b3 = 81, c3 = 82, d3 = 83,  e3 = 84,  f3 = 85,  g3 = 86,  h3 = 87;
     const a2 = 96, b2 = 97, c2 = 98, d2 = 99,  e2 = 100, f2 = 101, g2 = 102, h2 = 103;
     const a1 = 112, b1 = 113, c1 = 114, d1 = 115, e1 = 116, f1 = 117, g1 = 118, h1 = 119;
-    const no_sq = 120;
 
     const coordinates = [
         'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8', 'i8', 'j8', 'k8', 'l8', 'm8', 'n8', 'o8', 'p8',
@@ -40,6 +40,12 @@ var Board = function(width, light_square, dark_square, select_color) {
         'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'i1', 'j1', 'k1', 'l1', 'm1', 'n1', 'o1', 'p1'
     ];
 
+    //  promoted pieces
+    var promoted_pieces = {
+        [Q]: 'q', [R]: 'r', [B]: 'b', [N]: 'n',
+        [q]: 'q', [r]: 'r', [b]: 'b', [n]: 'n'
+    };
+
     const unicode_pieces = [
         //dot for empty
         '.',
@@ -48,13 +54,13 @@ var Board = function(width, light_square, dark_square, select_color) {
 
         '\u265F', '\u265E', '\u265D', '\u265C', '\u265B', '\u265A'
     ];
-    //  promoted pieces
-    var promoted_pieces = {
-        [Q]: 'q', [R]: 'r', [B]: 'b', [N]: 'n',
-        [q]: 'q', [r]: 'r', [b]: 'b', [n]: 'n'
-    };
 
     const KC = 1, QC = 2, kc = 4, qc = 8;
+
+    var knight_offsets = [33, 31, 18, 14, -33, -31, -18, -14];
+    var bishop_offsets = [15, 17, -15, -17];
+    var rook_offsets = [16, -16, 1, -1];
+    var king_offsets = [16, -16, 1, -1, 15, 17, -15, -17];
 
     var castling_rights = [
         7, 15, 15, 15,  3, 15, 15, 11,  o, o, o, o, o, o, o, o,
@@ -66,11 +72,6 @@ var Board = function(width, light_square, dark_square, select_color) {
         15, 15, 15, 15, 15, 15, 15, 15,  o, o, o, o, o, o, o, o,
         13, 15, 15, 12, 15, 15, 15, 14,  o, o, o, o, o, o, o, o
     ];
-
-    var knight_offsets = [33, 31, 18, 14, -33, -31, -18, -14];
-    var bishop_offsets = [15, 17, -15, -17];
-    var rook_offsets = [16, -16, 1, -1];
-    var king_offsets = [16, -16, 1, -1, 15, 17, -15, -17];
 
     // PST scores
     var board = [
@@ -104,7 +105,6 @@ var Board = function(width, light_square, dark_square, select_color) {
         random_state = number;
         return number;
     }
-
 
     var piece_keys = new Array(13 * 128);
     var castle_keys = new Array(16);
